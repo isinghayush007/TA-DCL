@@ -48,6 +48,8 @@ class ChestmnistDataset(Dataset):
 
         if len(image.getbands()) > 1:
             image = image.convert("RGB")  # Convert to RGB if the image has multiple channels
+
+        image = image.resize((640, 640))
     
         image = torch.Tensor(np.array(image))
         
