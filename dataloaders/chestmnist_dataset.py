@@ -76,18 +76,17 @@ class ChestmnistDataset(Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
 
+        labels = self.labs[idx].astype(int)
+        labels = torch.Tensor(labels)
+        print("Labels shape:", labels.shape)
+
         image = Image.open(self.root + "/" + self.imgs[idx])
         image = torch.Tensor(np.array(image))
+        print("Image shape:", image.shape)
         if len(image.shape) > 2:
             image = image[:, :, 0]
         if self.transform is not None:
             image = self.transform(image)
-
-        labels = self.labs[idx].astype(int)
-        labels = torch.Tensor(labels)
-
-        print("Image shape:", image.shape)
-        print("Labels shape:", labels.shape)
 
         sample = {}
         sample['image'] = image
