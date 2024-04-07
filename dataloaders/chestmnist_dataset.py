@@ -38,24 +38,24 @@ class ChestmnistDataset(Dataset):
             idx = idx.tolist()
 
         image = Image.open(self.root + "/" + self.imgs[idx])
-        image = torch.Tensor(np.array(image))
-        if len(image.shape) > 2:
-            # image = image[:, :, 0]
-            image = image.unsqueeze(0)
-        if self.transform is not None:
-            image = self.transform(image)
-
-
-        # if len(image.getbands()) > 1:
-        #     image = image.convert("RGB")  # Convert to RGB if the image has multiple channels
-    
         # image = torch.Tensor(np.array(image))
-        
+        # if len(image.shape) > 2:
+        #     # image = image[:, :, 0]
+        #     image = image.unsqueeze(0)
         # if self.transform is not None:
         #     image = self.transform(image)
 
-        # if len(image.shape) > 2:
-        #     image = image[:, :, 0]
+
+        if len(image.getbands()) > 1:
+            image = image.convert("RGB")  # Convert to RGB if the image has multiple channels
+    
+        image = torch.Tensor(np.array(image))
+        
+        if self.transform is not None:
+            image = self.transform(image)
+
+        if len(image.shape) > 2:
+            image = image[:, :, 0]
 
         labels = self.labs[idx].astype(int)
         labels = torch.Tensor(labels)
