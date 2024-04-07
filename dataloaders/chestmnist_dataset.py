@@ -40,11 +40,11 @@ class ChestmnistDataset(Dataset):
             idx = idx.tolist()
 
         image = Image.open(self.root + "/" + self.imgs[idx])
+        image = self.resizer(image)
         image = torch.Tensor(np.array(image))
         if len(image.shape) > 2:
             image = image.unsqueeze(0)
 
-        image = self.resizer(image)
         if self.transform is not None:
             image = self.transform(image)
 
