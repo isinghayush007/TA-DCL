@@ -12,7 +12,7 @@ class ChestmnistDataset(Dataset):
     def __init__(self, split, data_file, transform=None):
 
         self.split = split
-        self.split_data = np.load(data_file)
+        self.split_data = np.load(data_file, allow_pickle=True)
         self.root = "/kaggle/input/oia-odir-5k/oia-odir"
 
         if self.split == 'train':

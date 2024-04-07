@@ -77,7 +77,7 @@ def get_random_neg_samples(num=20):
 
     data_file = "/kaggle/working/data.npz"
     root = "/kaggle/input/oia-odir-5k/oia-odir"
-    split_data = np.load(data_file)
+    split_data = np.load(data_file, allow_pickle=True)
     imgs_h = split_data['train_images_healthy']
     labs_h = split_data['train_labels_healthy']
 
