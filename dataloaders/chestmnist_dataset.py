@@ -82,10 +82,10 @@ class ChestmnistDataset(Dataset):
 
         image = Image.open(self.root + "/" + self.imgs[idx])
         image = torch.Tensor(np.array(image))
-        print("Image shape:", image.shape)
         if len(image.shape) > 2:
             image = image[:, :, 0]
         if self.transform is not None:
+            print("Image shape:", image.shape)
             image = self.transform(image)
 
         sample = {}
