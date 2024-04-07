@@ -5,6 +5,7 @@ import random
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 from dataloaders.data_utils import get_unk_mask_indices, image_loader
+from torchvision.transforms import Resize
 
 
 class ChestmnistDataset(Dataset):
@@ -28,6 +29,7 @@ class ChestmnistDataset(Dataset):
             raise ValueError
 
         self.transform = transform
+        self.resizer = Resize((640, 640))
 
     def __len__(self):
         return self.imgs.shape[0]
@@ -49,7 +51,7 @@ class ChestmnistDataset(Dataset):
         if len(image.getbands()) > 1:
             image = image.convert("RGB")  # Convert to RGB if the image has multiple channels
 
-        image = image.resize((640, 640))
+        image = self.resizer(image)
     
         image = torch.Tensor(np.array(image))
         
