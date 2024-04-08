@@ -76,6 +76,12 @@ class SeBlock(nn.Module):
     def __init__(self, out_channels=512, feature_size=[7, 7], labels=14):
         super(SeBlock, self).__init__()
 
+        self.shortcut_1 = nn.Linear(feature_size[0]*feature_size[1], out_channels)
+        self.shortcut_2 = nn.LayerNorm(out_channels)
+        self.shortcut_3 = nn.ReLU(inplace=True)
+        self.shortcut_4 = nn.Linear(out_channels, out_channels)
+        self.shortcut_5 = nn.LayerNorm(out_channels)
+
         self.shortcut = nn.Sequential(
             nn.Linear(feature_size[0]*feature_size[1], out_channels),
             nn.LayerNorm(out_channels),
@@ -97,8 +103,14 @@ class SeBlock(nn.Module):
         print("x: ", x.shape)
         x = x.view(x.size(0), x.size(1), -1)
         print("x: ", x.shape)
-            
-        x_shortcut = self.shortcut(x)
+
+        # x_shortcut = self.shortcut(x)
+        x = self.shortcut_1(x)
+        x = self.shortcut_2(x)
+        x = self.shortcut_3(x)
+        x = self.shortcut_4(x)
+        x_shortcut = self.shortcut_5(x)
+
 
         x_tmp = self.avgpool(x_shortcut)
         x_tmp = x_tmp.permute(0, 2, 1)
