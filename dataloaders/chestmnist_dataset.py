@@ -44,6 +44,7 @@ class ChestmnistDataset(Dataset):
         
         image = Image.open(self.root + "/" + self.imgs[idx])
         image = torch.Tensor(np.array(image))
+        print(image.shape)
         image = image.permute(2, 0, 1)
         
         if self.transform is not None:
