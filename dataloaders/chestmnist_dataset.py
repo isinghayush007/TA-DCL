@@ -112,10 +112,11 @@ class ChestmnistDataset(Dataset):
         #     print("Image shape before transformation:", image.shape)
         if self.transform is not None:
             image = self.transform(image)
-            print("Image shape after transformation:", image.shape)
+            # print("Image shape after transformation:", image.shape)
         if len(image.shape) > 2:
             # image = image[:, :, 0]
             image = image[0]
+            print("Image shape after transformation:", image.shape)
 
         sample = {}
         sample['image'] = image
