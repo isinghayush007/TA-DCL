@@ -69,7 +69,7 @@ class CTranModel(nn.Module):
         features = self.backbone(images)
         print('backbone image feature shape:', features.size())
 
-        features = features.view(2048, features.size(0), features.size(1))
+        # features = features.view(2048, features.size(0), features.size(1))
 
         features1 = self.conv_downsample1(features)
 

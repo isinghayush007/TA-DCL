@@ -56,7 +56,7 @@ class Backbone(nn.Module):
         print("x layer4: ", x.shape)
         x = self.base_network.avgpool(x)
         print("x avgpool: ", x.shape)
-        x = x.view(x.size(0), -1)
+        # x = x.view(x.size(0), -1)
 
         print("x: ", x.shape)
         return x
