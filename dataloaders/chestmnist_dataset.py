@@ -71,30 +71,8 @@ class ChestmnistDataset(Dataset):
 
     #     return sample
 
-    # def __getitem__(self, idx):
-
-    #     if torch.is_tensor(idx):
-    #         idx = idx.tolist()
-
-    #     labels = self.labs[idx].astype(int)
-    #     labels = torch.Tensor(labels)
-    #     print("Labels shape:", labels.shape)
-
-    #     image = Image.open(self.root + "/" + self.imgs[idx])
-    #     image = torch.Tensor(np.array(image))
-    #     if len(image.shape) > 2:
-    #         image = image[:, :, 0]
-    #     if self.transform is not None:
-    #         print("Image shape:", image.shape)
-    #         image = self.transform(image)
-
-    #     sample = {}
-    #     sample['image'] = image
-    #     sample['labels'] = labels
-
-    #     return sample
-
     def __getitem__(self, idx):
+
         if torch.is_tensor(idx):
             idx = idx.tolist()
 
@@ -102,23 +80,46 @@ class ChestmnistDataset(Dataset):
         labels = torch.Tensor(labels)
         print("Labels shape:", labels.shape)
 
-        image = Image.open(os.path.join(self.root, self.imgs[idx]))
+        image = Image.open(self.root + "/" + self.imgs[idx])
         image = torch.Tensor(np.array(image))
-        # If the image is not in the correct format (e.g., grayscale), 
-        # convert it to a 3-channel RGB image
-        if image.dim() == 2:  # If the image is grayscale
-            image = image.unsqueeze(0).expand(3, -1, -1)  # Convert to 3-channel
-        elif image.dim() == 3 and image.shape[0] == 1:  # If the image has 1 channel
-            image = image.expand(3, -1, -1)  # Convert to 3-channel
-        print("Image shape (before resize):", image.shape)
-
-        # Resize the image
-        image = self.resizer(image)
-
+        if len(image.shape) > 2:
+            image = image[:, :, 0]
         if self.transform is not None:
+            print("Image shape:", image.shape)
             image = self.transform(image)
 
-        sample = {'image': image, 'labels': labels}
+        sample = {}
+        sample['image'] = image
+        sample['labels'] = labels
+
         return sample
+
+    def __getitem__(self, idx):
+
+        if torch.is_tensor(idx):
+            idx = idx.tolist()
+
+        labels = self.labs[idx].astype(int)
+        labels = torch.Tensor(labels)
+        print("Labels shape:", labels.shape)
+
+        image = Image.open(self.root + "/" + self.imgs[idx])
+        image = np.array(image)
+        
+        # Check if image is grayscale, if so, add channel dimension
+        if len(image.shape) == 2:
+            image = np.expand_dims(image, axis=2)
+
+        if self.transform is not None:
+            print("Image shape before transformation:", image.shape)
+            image = self.transform(image)
+            print("Image shape after transformation:", image.shape)
+
+        sample = {}
+        sample['image'] = image
+        sample['labels'] = labels
+
+        return sample
+
 
 
