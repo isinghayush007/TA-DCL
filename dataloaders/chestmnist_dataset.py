@@ -103,6 +103,7 @@ class ChestmnistDataset(Dataset):
         labels = torch.Tensor(labels)
         print("Labels shape:", labels.shape)
 
+        print(self.imgs[idx])
         image = Image.open(self.root + "/" + self.imgs[idx])
         image = torch.Tensor(np.array(image))
         image = image.permute(2, 0, 1)
