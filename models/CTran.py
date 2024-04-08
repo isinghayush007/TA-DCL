@@ -18,7 +18,7 @@ class CTranModel(nn.Module):
         self.backbone = Backbone()
         hidden = 2048 # this should match the backbone output feature size 2048
 
-        self.seblock = SeBlock(hidden, [7, 7], num_labels)
+        self.seblock = SeBlock(hidden, [14, 14], num_labels)
 
         self.conv_downsample1 = torch.nn.Conv2d(hidden, hidden, (1, 1))
         self.conv_downsample2 = torch.nn.Conv2d(hidden, num_labels, (1, 1))

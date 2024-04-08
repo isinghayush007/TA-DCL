@@ -73,7 +73,7 @@ class TransformerDecoderLayer(nn.Module):
 
 
 class SeBlock(nn.Module):
-    def __init__(self, out_channels=512, feature_size=[14, 14], labels=7):
+    def __init__(self, out_channels=512, feature_size=[7, 7], labels=14):
         super(SeBlock, self).__init__()
 
         # self.shortcut_1 = nn.Linear(feature_size[0]*feature_size[1], out_channels)
