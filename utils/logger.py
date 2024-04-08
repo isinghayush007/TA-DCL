@@ -10,7 +10,7 @@ class LossLogger:
         open(model_name+'/valid.log', "w").close()
         open(model_name+'/test.log', "w").close()
 
-    def log_losses(self, file_name, epoch, loss, metrics):
+    def log_losses(self, file_name, epoch, metrics):
         log_file = open(self.model_name+'/'+file_name, "a")
         log_file.write(str(epoch)+','+str(metrics['mAP'])+'\n')
         log_file.close()
