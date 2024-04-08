@@ -103,6 +103,7 @@ class SeBlock(nn.Module):
         x_tmp = self.se(x_tmp)
         x_tmp = x_tmp.permute(0, 2, 1)
 
+        print("x_shortcut: ", x_shortcut.shape, "x_tmp: ", x_tmp.shape);
         y = x_shortcut * x_tmp
 
         return y
