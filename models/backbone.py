@@ -48,7 +48,8 @@ class Backbone(nn.Module):
         x = self.base_network.layer4(x)
         x = self.base_network.avgpool(x)
         x = x.view(x.size(0), -1)
-    
+
+        print("x: ", x.shape)
         return x
 
 
