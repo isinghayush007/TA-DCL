@@ -109,7 +109,8 @@ def get_random_neg_samples(num=20):
         labels_batch.append(labels)
 
     images_batch = torch.stack(images_batch, dim=0)
-    images_batch = images_batch.view(images_batch[0], 1, images_batch[1], images_batch[2])
+    # images_batch = images_batch.view(images_batch[0], 1, images_batch[1], images_batch[2])
+    images_batch = images_batch.view(images_batch.size(0), images_batch.size(1), images_batch.size(2), images_batch.size(3))
 
     labels_batch = torch.stack(labels_batch, dim=0)
 

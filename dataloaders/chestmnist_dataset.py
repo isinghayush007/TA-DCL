@@ -34,90 +34,23 @@ class ChestmnistDataset(Dataset):
     def __len__(self):
         return self.imgs.shape[0]
 
-    # def __getitem__(self, idx):
+    def __getitem__(self, idx):
 
-    #     if torch.is_tensor(idx):
-    #         idx = idx.tolist()
+        if torch.is_tensor(idx):
+            idx = idx.tolist()
 
-    #     image = Image.open(self.root + "/" + self.imgs[idx])
-    #     # image = self.resizer(image)
-    #     image = torch.Tensor(np.array(image))
-    #     if len(image.shape) > 2:
-    #         image = image.
-
-    #     if self.transform is not None:
-    #         image = self.transform(image)
-
-
-    #     # if len(image.getbands()) > 1:
-    #     #     image = image.convert("RGB")  # Convert to RGB if the image has multiple channels
-
-    #     # image = self.resizer(image)
-    
-    #     # image = torch.Tensor(np.array(image))
+        labels = self.labs[idx].astype(int)
+        labels = torch.Tensor(labels)
         
-    #     # if self.transform is not None:
-    #     #     image = self.transform(image)
-
-    #     # if len(image.shape) > 2:
-    #     #     image = image[:, :, 0]
-
-    #     labels = self.labs[idx].astype(int)
-    #     labels = torch.Tensor(labels)
-
-    #     sample = {}
-    #     sample['image'] = image
-    #     sample['labels'] = labels
-
-    #     return sample
-
-    def __getitem__(self, idx):
-
-        if torch.is_tensor(idx):
-            idx = idx.tolist()
-
-        labels = self.labs[idx].astype(int)
-        labels = torch.Tensor(labels)
-        print("Labels shape:", labels.shape)
-
-        image = Image.open(self.root + "/" + self.imgs[idx])
-        image = torch.Tensor(np.array(image))
-        if len(image.shape) > 2:
-            image = image[:, :, 0]
-        if self.transform is not None:
-            print("Image shape:", image.shape)
-            image = self.transform(image)
-
-        sample = {}
-        sample['image'] = image
-        sample['labels'] = labels
-
-        return sample
-
-    def __getitem__(self, idx):
-
-        if torch.is_tensor(idx):
-            idx = idx.tolist()
-
-        labels = self.labs[idx].astype(int)
-        labels = torch.Tensor(labels)
-        print("Labels shape:", labels.shape)
-
-        # print(self.imgs[idx])
         image = Image.open(self.root + "/" + self.imgs[idx])
         image = torch.Tensor(np.array(image))
         image = image.permute(2, 0, 1)
-        # if len(image.shape) > 2:
-        #     # image = image[:, :, 0]
-        #     image = image[0]
-        #     print("Image shape before transformation:", image.shape)
+        
         if self.transform is not None:
             image = self.transform(image)
-            # print("Image shape after transformation:", image.shape)
         if len(image.shape) > 2:
             # image = image[:, :, 0]
             image = image[0]
-            print("Image shape after transformation:", image.shape)
 
         sample = {}
         sample['image'] = image
