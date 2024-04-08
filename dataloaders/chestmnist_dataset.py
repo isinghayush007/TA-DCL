@@ -14,7 +14,7 @@ class ChestmnistDataset(Dataset):
 
         self.split = split
         self.split_data = np.load(data_file, allow_pickle=True)
-        self.root = "/kaggle/input/oia-odir-5k/oia-odir"
+        self.root = "/kaggle/input/oia-odir"
 
         if self.split == 'train':
             self.imgs = self.split_data['train_images_sick']
