@@ -93,9 +93,14 @@ def get_random_neg_samples(num=20):
 
         image = Image.open(root + "/" + imgs_h[idx_list[i]])
         image = torch.Tensor(np.array(image))
-        if len(image.shape) > 2:
-            image = image[:, :, 0]
+
+        image = image.permute(2, 0, 1)
         image = Transform_h(image)
+        
+        if len(image.shape) > 2:
+            # image = image[:, :, 0]
+            image = image[0]
+        # image = Transform_h(image)
 
         labels = labs_h[idx_list[i]].astype(int)
         labels = torch.Tensor(labels)
