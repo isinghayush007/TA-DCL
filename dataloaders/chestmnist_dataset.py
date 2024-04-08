@@ -111,7 +111,7 @@ class ChestmnistDataset(Dataset):
         #     image = np.expand_dims(image, axis=2)
 
         if self.transform is not None:
-            print("Image shape before transformation:", image.shape)
+            # print("Image shape before transformation:", image.shape)
             image = self.transform(image)
             print("Image shape after transformation:", image.shape)
 
