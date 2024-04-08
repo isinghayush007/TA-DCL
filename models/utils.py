@@ -58,7 +58,9 @@ def interClass_Sim(tensor1, tensor2, labels1):
     bsize, seqlen, seqdim = tensor1.size()[0], tensor1.size()[1], tensor1.size()[2]
 
     tensor1 = tensor1.view(-1, seqdim)
+    print("tensor1: ", tensor1.shape)
     tensor2 = tensor2.view(-1, seqdim)
+    print("tensor2: ", tensor2.shape)
     labels1 = labels1.view(bsize*seqlen)
 
     masks = labels1.ge(0.5)
