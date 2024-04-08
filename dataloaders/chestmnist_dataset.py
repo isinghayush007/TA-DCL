@@ -52,6 +52,7 @@ class ChestmnistDataset(Dataset):
         #     # image = image[:, :, 0]
         #     image = image[0]
 
+        image = image[0].unsqueeze(0)
         # print(image.shape)
 
         sample = {}
