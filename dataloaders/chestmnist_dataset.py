@@ -48,9 +48,9 @@ class ChestmnistDataset(Dataset):
         
         if self.transform is not None:
             image = self.transform(image)
-        if len(image.shape) > 2:
-            # image = image[:, :, 0]
-            image = image[0]
+        # if len(image.shape) > 2:
+        #     # image = image[:, :, 0]
+        #     image = image[0]
 
         sample = {}
         sample['image'] = image
