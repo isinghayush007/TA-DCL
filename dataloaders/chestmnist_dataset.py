@@ -106,10 +106,10 @@ class ChestmnistDataset(Dataset):
         image = Image.open(self.root + "/" + self.imgs[idx])
         image = torch.Tensor(np.array(image))
         image = image.permute(2, 0, 1)
-        if len(image.shape) > 2:
-            # image = image[:, :, 0]
-            image = image[0]
-            print("Image shape before transformation:", image.shape)
+        # if len(image.shape) > 2:
+        #     # image = image[:, :, 0]
+        #     image = image[0]
+        #     print("Image shape before transformation:", image.shape)
         if self.transform is not None:
             image = self.transform(image)
             print("Image shape after transformation:", image.shape)
