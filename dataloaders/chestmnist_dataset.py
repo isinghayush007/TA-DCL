@@ -109,7 +109,7 @@ class ChestmnistDataset(Dataset):
         # Check if image is grayscale, if so, add channel dimension
         # if len(image.shape) == 2:
         #     image = np.expand_dims(image, axis=2)
-
+        image = torch.Tensor(np.array(image))
         if self.transform is not None:
             # print("Image shape before transformation:", image.shape)
             image = self.transform(image)
