@@ -60,14 +60,14 @@ class CTranModel(nn.Module):
         self.output_linear2.apply(weights_init)
 
     def forward(self, images):
-        print('forward: ', images.shape)
+        # print('forward: ', images.shape)
 
         const_label_input = self.label_input.repeat(images.size(0), 1).cuda()
         init_label_embeddings = self.label_lt(const_label_input)
         # print('init_label_embeddings:', init_label_embeddings.size())
 
         features = self.backbone(images)
-        print('backbone image feature shape:', features.size())
+        # print('backbone image feature shape:', features.size())
 
         # features = features.view(2048, features.size(0), features.size(1))
 

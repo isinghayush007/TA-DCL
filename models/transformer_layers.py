@@ -94,8 +94,10 @@ class SeBlock(nn.Module):
         )
 
     def forward(self, x):
+        print("x: ", x.shape)
         x = x.view(x.size(0), x.size(1), -1)
-
+        print("x: ", x.shape)
+            
         x_shortcut = self.shortcut(x)
 
         x_tmp = self.avgpool(x_shortcut)
