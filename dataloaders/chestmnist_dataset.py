@@ -104,17 +104,12 @@ class ChestmnistDataset(Dataset):
         print("Labels shape:", labels.shape)
 
         image = Image.open(self.root + "/" + self.imgs[idx])
-        # image = np.array(image)
-        
-        # Check if image is grayscale, if so, add channel dimension
-        # if len(image.shape) == 2:
-        #     image = np.expand_dims(image, axis=2)
         image = torch.Tensor(np.array(image))
+        image = image.permute(2, 0, 1)
         if len(image.shape) > 2:
             image = image[:, :, 0]
             print("Image shape before transformation:", image.shape)
         if self.transform is not None:
-            # print("Image shape before transformation:", image.shape)
             image = self.transform(image)
             print("Image shape after transformation:", image.shape)
 
