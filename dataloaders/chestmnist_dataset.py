@@ -107,7 +107,8 @@ class ChestmnistDataset(Dataset):
         image = torch.Tensor(np.array(image))
         image = image.permute(2, 0, 1)
         if len(image.shape) > 2:
-            image = image[:, :, 0]
+            # image = image[:, :, 0]
+            image = image[0]
             print("Image shape before transformation:", image.shape)
         if self.transform is not None:
             image = self.transform(image)
