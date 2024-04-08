@@ -110,6 +110,9 @@ class ChestmnistDataset(Dataset):
         # if len(image.shape) == 2:
         #     image = np.expand_dims(image, axis=2)
         image = torch.Tensor(np.array(image))
+        if len(image.shape) > 2:
+            image = image[:, :, 0]
+            print("Image shape before transformation:", image.shape)
         if self.transform is not None:
             # print("Image shape before transformation:", image.shape)
             image = self.transform(image)
