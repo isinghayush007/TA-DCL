@@ -65,9 +65,8 @@ class CTranModel(nn.Module):
         init_label_embeddings = self.label_lt(const_label_input)
         # print('init_label_embeddings:', init_label_embeddings.size())
 
-        print(images.shape)
         features = self.backbone(images)
-        # print('backbone image feature shape:', features.size())
+        print('backbone image feature shape:', features.size())
 
         features1 = self.conv_downsample1(features)
 
