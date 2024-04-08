@@ -7,7 +7,7 @@ def get_args(parser, eva=False):
     parser.add_argument('--dataroot', type=str, default='/kaggle/input/oia-odir-5k/oia-odir')
     parser.add_argument('--dataset', type=str, choices=['coco', 'voc', 'chestmnist'], default='chestmnist')
     parser.add_argument('--workers', type=int, default=1)
-    parser.add_argument('--results_dir', type=str, default='results/')
+    parser.add_argument('--results_dir', type=str, default='/kaggle/input/results/')
 
     # Optimization
     parser.add_argument('--optim', type=str, choices=['adam', 'sgd'], default='adam')
