@@ -28,7 +28,7 @@ def run_epoch(args, model, data, optimizer, desc, train=False):
         images = batch['image'].float()
         print(images.shape)
 
-        images = images.view(images.size(0), 1, images.size(1), images.size(2))
+        images = images.view(1, images.size(0), images.size(1), images.size(2))
         print(images.shape)
 
         if train:
