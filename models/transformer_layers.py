@@ -104,6 +104,8 @@ class SeBlock(nn.Module):
         x = x.view(x.size(0), x.size(1), -1)
         print("x: ", x.shape)
 
+        x = x.view(x.size(0), -1)
+        print("x: ", x.shape)
         # x_shortcut = self.shortcut(x)
         x = self.shortcut_1(x)
         x = self.shortcut_2(x)
@@ -117,7 +119,6 @@ class SeBlock(nn.Module):
         x_tmp = self.se(x_tmp)
         x_tmp = x_tmp.permute(0, 2, 1)
 
-        print("x_shortcut: ", x_shortcut.shape, "x_tmp: ", x_tmp.shape);
         y = x_shortcut * x_tmp
 
         return y

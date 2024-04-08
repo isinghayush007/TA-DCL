@@ -58,7 +58,7 @@ class Backbone(nn.Module):
         # print("x avgpool: ", x.shape)
         # x = x.view(x.size(0), -1)
 
-        print("x: ", x.shape)
+        # print("x: ", x.shape)
         return x
 
 
