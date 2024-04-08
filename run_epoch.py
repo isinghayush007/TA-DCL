@@ -26,6 +26,7 @@ def run_epoch(args, model, data, optimizer, desc, train=False):
 
         labels = batch['labels'].float()
         images = batch['image'].float()
+        print(images.shape)
 
         if train:
             images_healthy, labels_healthy = get_random_neg_samples(num=args.batch_size)
