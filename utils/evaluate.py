@@ -57,6 +57,7 @@ def compute_metrics(args,
         print('OP:    {:0.1f}'.format(OP*100))
         print('OR:    {:0.1f}'.format(OR*100))
         print('OF1:   {:0.1f}'.format(OF1*100))
+        print('ACC:   {:0.1f}'.format(ACC*100))
 
     metrics_dict = {}
     metrics_dict['mAP'] = meanAP
