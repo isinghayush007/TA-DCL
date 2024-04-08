@@ -60,6 +60,7 @@ class CTranModel(nn.Module):
         self.output_linear2.apply(weights_init)
 
     def forward(self, images):
+        print('forward: ', images.shape)
 
         const_label_input = self.label_input.repeat(images.size(0), 1).cuda()
         init_label_embeddings = self.label_lt(const_label_input)
@@ -68,7 +69,7 @@ class CTranModel(nn.Module):
         features = self.backbone(images)
         print('backbone image feature shape:', features.size())
 
-        features = features.view(features.size(0), 1, features.size(1))
+        features = features.view(2048, features.size(0), features.size(1))
 
         features1 = self.conv_downsample1(features)
 
