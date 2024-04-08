@@ -65,6 +65,7 @@ def interClass_Sim(tensor1, tensor2, labels1):
 
     masks = labels1.ge(0.5)
     print("Shape of masks:", masks.shape)
+    print("masks: ", masks)
 
     cos_sim = F.cosine_similarity(tensor1, tensor2, dim=1)
 
