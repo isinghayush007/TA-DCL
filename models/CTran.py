@@ -63,9 +63,10 @@ class CTranModel(nn.Module):
         # print('forward: ', images.shape)
 
         const_label_input = self.label_input.repeat(images.size(0), 1).cuda()
+        print("const_label_input: ", const_label_input);
         init_label_embeddings = self.label_lt(const_label_input)
-        # print('init_label_embeddings:', init_label_embeddings.size())
-        print('init_label_embeddings:', init_label_embeddings)
+        print('init_label_embeddings:', init_label_embeddings.size())
+        # print('init_label_embeddings:', init_label_embeddings)
 
         features = self.backbone(images)
         # print('backbone image feature shape:', features.size())
