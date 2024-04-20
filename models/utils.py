@@ -64,7 +64,8 @@ def interClass_Sim(tensor1, tensor2, labels1):
 
     masks = labels1.ge(0.5)
 
-    cos_sim = F.cosine_similarity(tensor1, tensor2, dim=1)
+    # cos_sim = F.cosine_similarity(tensor1, tensor2, dim=1)
+    cos_sim = F.cosine_similarity(tensor1, tensor2)
 
     cos_sim_diff = cos_sim[masks]
     cos_sim_same = cos_sim[~masks]
