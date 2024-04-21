@@ -75,9 +75,11 @@ class CTranModel(nn.Module):
 
         # Image spatial features 𝐅𝑠
         features1 = self.conv_downsample1(features)
+        print("features1 shape", features1.size())
 
         # F'
         features2 = self.conv_downsample2(features)
+        print("features2 shape", features2.size())
 
         # Category attention features 𝐅𝑎
         features3 = self.seblock(features2)
@@ -122,16 +124,17 @@ class CTranModel(nn.Module):
 
         output1 = self.output_linear1(label_embeddings)
         print('output shape:', output1.size())
-        print("output1: ", output1)
+        # print("output1: ", output1)
         diag_mask = torch.eye(output1.size(1)).unsqueeze(0).repeat(output1.size(0), 1, 1).cuda()
-        # print('diag_mask shape:', diag_mask.size())
+        print('diag_mask shape:', diag_mask.size())
         output1 = (output1*diag_mask).sum(-1)
-        # print('output1 shape:', output1.size())
+        print('output1 shape:', output1.size())
+        print("output1: ", output1);
 
         output2 = self.output_linear2(features2)
-        # print('output2 shape:', output2.size())
+        print('output2 shape:', output2.size())
         output2 = torch.squeeze(output2)
-        # print('output2 shape:', output2.size())
+        print('output2 shape:', output2.size())
 
         return output1, output2, label_embeddings
 
