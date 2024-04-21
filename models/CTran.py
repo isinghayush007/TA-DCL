@@ -118,11 +118,11 @@ class CTranModel(nn.Module):
         for layer in self.decoder_layers:
             label_embeddings = layer(label_embeddings, image_embeddings)
             # attns += attn.detach().unsqueeze(0).data
-        print('decoder label embeddings shape:', label_embeddings.size())
+        # print('decoder label embeddings shape:', label_embeddings.size())
 
         output1 = self.output_linear1(label_embeddings)
-
-        # print('output shape:', output.size())
+        print('output shape:', output1.size())
+        print("output1: ", output1)
         diag_mask = torch.eye(output1.size(1)).unsqueeze(0).repeat(output1.size(0), 1, 1).cuda()
         # print('diag_mask shape:', diag_mask.size())
         output1 = (output1*diag_mask).sum(-1)
