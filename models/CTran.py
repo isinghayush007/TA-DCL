@@ -60,7 +60,7 @@ class CTranModel(nn.Module):
         self.output_linear2.apply(weights_init)
 
     def forward(self, images):
-        # print('forward: ', images.shape)
+        print('forward: ', images.shape)
 
         const_label_input = self.label_input.repeat(images.size(0), 1).cuda()
         # print("const_label_input: ", const_label_input);
