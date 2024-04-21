@@ -37,7 +37,7 @@ class CTranModel(nn.Module):
 
 
         #MaxVit
-        self.maxvit = timm.create_model('nextvit_base.bd_in1k', pretrained=False)
+        self.maxvit = timm.create_model('maxvit_tiny_tf_224.in1k', pretrained=False)
 
         # Transformer
         self.encoder_layers = nn.ModuleList([TransformerEncoderLayer(hidden, heads, dropout) for _ in range(layers)])
@@ -97,6 +97,10 @@ class CTranModel(nn.Module):
         # print('resized feature shape:', features.size())
 
         init_label_embeddings = init_label_embeddings + features3
+
+        input_shape = self.maxvit.default_cfg['input_size']
+        # Print the input shape
+        print("Input shape:", input_shape)
 
         maxvit_output = self.maxvit(features)
 
