@@ -133,8 +133,10 @@ class CTranModel(nn.Module):
 
         output2 = self.output_linear2(features2)
         print('output2 shape:', output2.size())
+        print('output2: ', output2)
         output2 = torch.squeeze(output2)
         print('output2 shape:', output2.size())
+        print("output2: ", output2)
 
         return output1, output2, label_embeddings
 
