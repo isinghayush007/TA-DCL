@@ -69,7 +69,7 @@ class CTranModel(nn.Module):
         # print('init_label_embeddings:', init_label_embeddings)
 
         features = self.backbone(images)
-        print('backbone image feature shape:', features.size())
+        # print('backbone image feature shape:', features.size())
 
         # features = features.view(2048, features.size(0), features.size(1))
 
