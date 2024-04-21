@@ -9,8 +9,6 @@ from .backbone import Backbone
 from .utils import custom_replace, weights_init, intraClass_Sim
 from .position_enc import PositionEmbeddingSine, positionalencoding2d
 
-import timm
-
  
 class CTranModel(nn.Module):
     def __init__(self, num_labels, pos_emb=False, layers=4, heads=8, dropout=0.1):
@@ -34,10 +32,6 @@ class CTranModel(nn.Module):
         if self.use_pos_enc:
             # self.position_encoding = PositionEmbeddingSine(int(hidden/2), normalize=True)
             self.position_encoding = positionalencoding2d(hidden, 18, 18).unsqueeze(0)
-
-
-        #MaxVit
-        self.maxvit = timm.create_model('maxvit_tiny_tf_224.in1k', pretrained=False)
 
         # Transformer
         self.encoder_layers = nn.ModuleList([TransformerEncoderLayer(hidden, heads, dropout) for _ in range(layers)])
@@ -98,45 +92,36 @@ class CTranModel(nn.Module):
 
         init_label_embeddings = init_label_embeddings + features3
 
-        input_shape = self.maxvit.default_cfg['input_size']
-        # Print the input shape
-        print("Input shape:", input_shape)
+        embeddings = torch.cat((features1, init_label_embeddings), 1)
 
-        maxvit_output = self.maxvit(features)
+        # print('transformer input shape:', embeddings.size())
 
-        # embeddings = torch.cat((features1, init_label_embeddings), 1)
+        # Feed image and label embeddings through Transformer
+        embeddings = self.LayerNorm(embeddings)        
+        # attns = []
+        for layer in self.encoder_layers:
+            embeddings = layer(embeddings)
+            # attns += attn.detach().unsqueeze(0).data
 
-        # # print('transformer input shape:', embeddings.size())
+        # print('transformer output shape:', embeddings.size())
 
-        # # Feed image and label embeddings through Transformer
-        # embeddings = self.LayerNorm(embeddings)        
-        # # attns = []
-        # for layer in self.encoder_layers:
-        #     embeddings = layer(embeddings)
-        #     # attns += attn.detach().unsqueeze(0).data
+        # 𝐅s′
+        image_embeddings = embeddings[:, 0:features1.size(1), :]
+        # E'
+        label_embeddings = embeddings[:, -init_label_embeddings.size(1):, :]
+        # print('')
+        # print('encoder image embeddings shape:', image_embeddings.size())
+        # print('encoder label embeddings shape:', label_embeddings.size())
 
-        # # print('transformer output shape:', embeddings.size())
+        label_embeddings = label_embeddings + features3
 
-        # # 𝐅s′
-        # image_embeddings = embeddings[:, 0:features1.size(1), :]
-        # # E'
-        # label_embeddings = embeddings[:, -init_label_embeddings.size(1):, :]
-        # # print('')
-        # # print('encoder image embeddings shape:', image_embeddings.size())
-        # # print('encoder label embeddings shape:', label_embeddings.size())
+        for layer in self.decoder_layers:
+            label_embeddings = layer(label_embeddings, image_embeddings)
+            # attns += attn.detach().unsqueeze(0).data
+        # # print('decoder label embeddings shape:', label_embeddings.size())
 
-        # label_embeddings = label_embeddings + features3
+        output1 = self.output_linear1(label_embeddings)
 
-        # for layer in self.decoder_layers:
-        #     label_embeddings = layer(label_embeddings, image_embeddings)
-        #     # attns += attn.detach().unsqueeze(0).data
-        # # # print('decoder label embeddings shape:', label_embeddings.size())
-
-        embeddings = self.LayerNorm(embeddings + maxvit_output)
-
-        # output1 = self.output_linear1(label_embeddings)
-
-        output1 = self.output_linear1(embeddings[:, -init_label_embeddings.size(1):, :])
         # print('output shape:', output.size())
         diag_mask = torch.eye(output1.size(1)).unsqueeze(0).repeat(output1.size(0), 1, 1).cuda()
         # print('diag_mask shape:', diag_mask.size())
@@ -148,5 +133,5 @@ class CTranModel(nn.Module):
         output2 = torch.squeeze(output2)
         # print('output2 shape:', output2.size())
 
-        return output1, output2, maxvit_output
+        return output1, output2, label_embeddings
 
