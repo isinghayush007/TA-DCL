@@ -38,15 +38,15 @@ def get_data(args):
 
     train_dataset = ChestmnistDataset(
         split='train',
-        data_file=os.path.join(chestmnist_root, 'chestmnist.npz'),
+        data_file=os.path.join(chestmnist_root, 'chestmnist_sample.npz'),
         transform=trainTransform)
     valid_dataset = ChestmnistDataset(
         split='val',
-        data_file=os.path.join(chestmnist_root, 'chestmnist.npz'),
+        data_file=os.path.join(chestmnist_root, 'chestmnist_sample.npz'),
         transform=testTransform)
     test_dataset = ChestmnistDataset(
         split='test',
-        data_file=os.path.join(chestmnist_root, 'chestmnist.npz'),
+        data_file=os.path.join(chestmnist_root, 'chestmnist_sample.npz'),
         transform=testTransform)
 
     if train_dataset is not None:
@@ -75,7 +75,7 @@ def get_random_neg_samples(num=20):
                                       transforms.RandomHorizontalFlip(),
                                       normTransform])
 
-    data_file = "/kaggle/working/data.npz"
+    data_file = "/kaggle/working/data_sample.npz"
     root = "/kaggle/input/oia-odir"
     split_data = np.load(data_file, allow_pickle=True)
     imgs_h = split_data['train_images_healthy']
