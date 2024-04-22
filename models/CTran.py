@@ -63,10 +63,7 @@ class CTranModel(nn.Module):
         # print('forward: ', images.shape)
 
         const_label_input = self.label_input.repeat(images.size(0), 1).cuda()
-        # print("const_label_input: ", const_label_input);
         init_label_embeddings = self.label_lt(const_label_input)
-        # print('init_label_embeddings:', init_label_embeddings.size())
-        # print('init_label_embeddings:', init_label_embeddings)
 
         features = self.backbone(images)
         # print('backbone image feature shape:', features.size())
@@ -93,10 +90,8 @@ class CTranModel(nn.Module):
         # print('resized feature shape:', features1.size())
 
         init_label_embeddings = init_label_embeddings + features3
-        # print('init_label_embeddings:', init_label_embeddings.size())
 
         embeddings = torch.cat((features1, init_label_embeddings), 1)
-        # print('transformer input shape:', embeddings.size())
 
         # Feed image and label embeddings through Transformer
         embeddings = self.LayerNorm(embeddings)        
@@ -123,17 +118,11 @@ class CTranModel(nn.Module):
         # print('decoder label embeddings shape:', label_embeddings.size())
 
         output1 = self.output_linear1(label_embeddings)
-        # print('output shape:', output1.size())
-        # print("output1: ", output1)
         diag_mask = torch.eye(output1.size(1)).unsqueeze(0).repeat(output1.size(0), 1, 1).cuda()
-        print('diag_mask shape:', diag_mask.size())
-        print('diag_mask: ', diag_mask);
         output1 = (output1*diag_mask).sum(-1)
-        # print('output1 shape:', output1.size())
-        # print("output1: ", output1);
 
         output2 = self.output_linear2(features2)
-        # print('output2 shape:', output2.size())
+        print('output2 shape:', output2.size())
         # print('output2: ', output2)
         output2 = torch.squeeze(output2)
         # print('output2 shape:', output2.size())
