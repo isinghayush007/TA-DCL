@@ -69,17 +69,17 @@ class CTranModel(nn.Module):
         # print('init_label_embeddings:', init_label_embeddings)
 
         features = self.backbone(images)
-        # print('backbone image feature shape:', features.size())
+        print('backbone image feature shape:', features.size())
 
         # features = features.view(2048, features.size(0), features.size(1))
 
         # Image spatial features 𝐅𝑠
         features1 = self.conv_downsample1(features)
-        print("features1 shape", features1.size())
+        # print("features1 shape", features1.size())
 
         # F'
         features2 = self.conv_downsample2(features)
-        print("features2 shape", features2.size())
+        # print("features2 shape", features2.size())
 
         # Category attention features 𝐅𝑎
         features3 = self.seblock(features2)
@@ -123,20 +123,20 @@ class CTranModel(nn.Module):
         # print('decoder label embeddings shape:', label_embeddings.size())
 
         output1 = self.output_linear1(label_embeddings)
-        print('output shape:', output1.size())
+        # print('output shape:', output1.size())
         # print("output1: ", output1)
         diag_mask = torch.eye(output1.size(1)).unsqueeze(0).repeat(output1.size(0), 1, 1).cuda()
-        print('diag_mask shape:', diag_mask.size())
+        # print('diag_mask shape:', diag_mask.size())
         output1 = (output1*diag_mask).sum(-1)
-        print('output1 shape:', output1.size())
-        print("output1: ", output1);
+        # print('output1 shape:', output1.size())
+        # print("output1: ", output1);
 
         output2 = self.output_linear2(features2)
-        print('output2 shape:', output2.size())
-        print('output2: ', output2)
+        # print('output2 shape:', output2.size())
+        # print('output2: ', output2)
         output2 = torch.squeeze(output2)
-        print('output2 shape:', output2.size())
-        print("output2: ", output2)
+        # print('output2 shape:', output2.size())
+        # print("output2: ", output2)
 
         return output1, output2, label_embeddings
 
