@@ -22,23 +22,29 @@ class MaxVit(nn.Module):
         # Modify the last layer to output 2048 channels
         self.base_network.head = nn.Identity()
 
-        # Check if the model has 'patch_embed' as a direct attribute, otherwise look into 'stem'
+        # Modify the patch embedding layer to accept 1 input channel
         if hasattr(self.base_network, 'patch_embed'):
             patch_embed = self.base_network.patch_embed
+            patch_embed.proj = nn.Conv2d(
+                in_channels=1,
+                out_channels=patch_embed.proj.out_channels,
+                kernel_size=patch_embed.proj.kernel_size,
+                stride=patch_embed.proj.stride,
+                padding=patch_embed.proj.padding,
+                bias=False
+            )
         elif hasattr(self.base_network, 'stem'):
-            patch_embed = self.base_network.stem
+            stem = self.base_network.stem
+            stem.conv = nn.Conv2d(
+                in_channels=1,
+                out_channels=stem.conv.out_channels,
+                kernel_size=stem.conv.kernel_size,
+                stride=stem.conv.stride,
+                padding=stem.conv.padding,
+                bias=False
+            )
         else:
             raise AttributeError("Model doesn't have 'patch_embed' or 'stem' attribute.")
-
-        # Modify the projection layer to accept 1 input channel
-        patch_embed.proj = nn.Conv2d(
-            in_channels=1,
-            out_channels=patch_embed.proj.out_channels,
-            kernel_size=patch_embed.proj.kernel_size,
-            stride=patch_embed.proj.stride,
-            padding=patch_embed.proj.padding,
-            bias=False
-        )
 
         # Freeze layers if needed
         if self.freeze_base:
@@ -52,8 +58,7 @@ class MaxVit(nn.Module):
         x = self.base_network(images)
 
         return x
-
- 
+    
 class Backbone(nn.Module):
     def __init__(self):
         super(Backbone, self).__init__()
