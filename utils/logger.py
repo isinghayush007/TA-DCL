@@ -82,7 +82,7 @@ class Logger:
                    args.model_name+'/'+'epochs'+'/'+'model_epoch'+str(epoch)+'_mAP'+str(format(valid_metrics['mAP'], '.2f'))+'.pt')
 
         if valid_metrics['ACC'] >= self.best_acc:
-            self.best_acc = valid_metrics['acc']
+            self.best_acc = valid_metrics['ACC']
         
         if valid_metrics['mAP'] >= self.best_mAP:
             self.best_mAP = valid_metrics['mAP']
