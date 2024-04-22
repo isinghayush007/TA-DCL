@@ -14,6 +14,7 @@ class MaxVit(nn.Module):
     def __init__(self):
         super(MaxVit, self).__init__()
         # Load the pre-trained model
+        self.inplanes = 64
         self.base_model = timm.create_model('maxvit_tiny_tf_224.in1k', pretrained=True)
 
         self.conv = nn.Conv2d(in_channels=1,
@@ -22,6 +23,8 @@ class MaxVit(nn.Module):
                                             stride=2,
                                             padding=3,
                                             bias=False)
+        
+        self.bn = nn.BatchNorm2d(self.inplanes)
         
         # self.final_layers = nn.Sequential(
         #     nn.Conv2d(self.base_model.num_features, 2048, kernel_size=1),
@@ -36,7 +39,7 @@ class MaxVit(nn.Module):
 
     def forward(self, images):
         x = self.conv(images)
-        print("x: ", x)
+        print("x: ", x.shape)
         return x
     
 class Backbone(nn.Module):
