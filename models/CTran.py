@@ -105,7 +105,7 @@ class CTranModel(nn.Module):
             embeddings = layer(embeddings)
             # attns += attn.detach().unsqueeze(0).data
 
-        print('transformer output shape:', embeddings.size())
+        # print('transformer output shape:', embeddings.size())
 
         # 𝐅s′
         image_embeddings = embeddings[:, 0:features1.size(1), :]
@@ -120,7 +120,7 @@ class CTranModel(nn.Module):
         for layer in self.decoder_layers:
             label_embeddings = layer(label_embeddings, image_embeddings)
             # attns += attn.detach().unsqueeze(0).data
-        # print('decoder label embeddings shape:', label_embeddings.size())
+        print('decoder label embeddings shape:', label_embeddings.size())
 
         output1 = self.output_linear1(label_embeddings)
         # print('output shape:', output1.size())
