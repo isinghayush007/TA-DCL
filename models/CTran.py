@@ -83,14 +83,14 @@ class CTranModel(nn.Module):
 
         # Category attention features 𝐅𝑎
         features3 = self.seblock(features2)
-        print('seblock output shape:', features3.size())
+        # print('seblock output shape:', features3.size())
 
         if self.use_pos_enc:
             pos_encoding = self.position_encoding(features1, torch.zeros(features.size(0), 18, 18, dtype=torch.bool).cuda())
             features1 = features1 + pos_encoding
 
         features1 = features1.view(features1.size(0), features1.size(1), -1).permute(0, 2, 1)
-        # print('resized feature shape:', features.size())
+        print('resized feature shape:', features.size())
 
         init_label_embeddings = init_label_embeddings + features3
 
