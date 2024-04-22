@@ -22,12 +22,21 @@ class MaxVit(nn.Module):
         # Modify the last layer to output 2048 channels
         self.base_network.head = nn.Identity()
 
-        self.base_network.patch_embed.proj = nn.Conv2d(
+        # Check if the model has 'patch_embed' as a direct attribute, otherwise look into 'stem'
+        if hasattr(self.base_network, 'patch_embed'):
+            patch_embed = self.base_network.patch_embed
+        elif hasattr(self.base_network, 'stem'):
+            patch_embed = self.base_network.stem
+        else:
+            raise AttributeError("Model doesn't have 'patch_embed' or 'stem' attribute.")
+
+        # Modify the projection layer to accept 1 input channel
+        patch_embed.proj = nn.Conv2d(
             in_channels=1,
-            out_channels=self.base_network.patch_embed.proj.out_channels,
-            kernel_size=self.base_network.patch_embed.proj.kernel_size,
-            stride=self.base_network.patch_embed.proj.stride,
-            padding=self.base_network.patch_embed.proj.padding,
+            out_channels=patch_embed.proj.out_channels,
+            kernel_size=patch_embed.proj.kernel_size,
+            stride=patch_embed.proj.stride,
+            padding=patch_embed.proj.padding,
             bias=False
         )
 
