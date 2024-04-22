@@ -33,7 +33,7 @@ class MaxVit(nn.Module):
         x = F.interpolate(x, size=(224, 224), mode='bilinear', align_corners=False)
         # Forward pass through the model
         x = self.base_model.forward_features(x)
-        print("x: ", x);
+        print("x: ", x.shape);
         return x
 
     
