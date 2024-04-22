@@ -8,56 +8,6 @@ from pdb import set_trace as stop
 import os
 from torch.nn import Parameter
 import torch.utils.model_zoo as model_zoo
-import timm 
-
-class MaxVit(nn.Module):
-    def __init__(self):
-        super(MaxVit, self).__init__()
-        embedding_dim = 2048
-        self.freeze_base = False
-        self.freeze_base4 = False
-
-        self.base_network = timm.create_model('maxvit_tiny_tf_224.in1k', pretrained=True)
-
-        # Modify the last layer to output 2048 channels
-        self.base_network.head = nn.Identity()
-
-        # Modify the patch embedding layer to accept 1 input channel
-        if hasattr(self.base_network, 'patch_embed'):
-            patch_embed = self.base_network.patch_embed
-            patch_embed.proj = nn.Conv2d(
-                in_channels=1,
-                out_channels=patch_embed.proj.out_channels,
-                kernel_size=patch_embed.proj.kernel_size,
-                stride=patch_embed.proj.stride,
-                padding=patch_embed.proj.padding,
-                bias=False
-            )
-        elif hasattr(self.base_network, 'stem'):
-            stem = self.base_network.stem
-            stem.conv = nn.Conv2d(
-                in_channels=1,
-                out_channels=stem.conv.out_channels,
-                kernel_size=stem.conv.kernel_size,
-                stride=stem.conv.stride,
-                padding=stem.conv.padding,
-                bias=False
-            )
-        else:
-            raise AttributeError("Model doesn't have 'patch_embed' or 'stem' attribute.")
-
-        # Freeze layers if needed
-        if self.freeze_base:
-            for param in self.base_network.parameters():
-                param.requires_grad = False
-        elif self.freeze_base4:
-            for p in self.base_network.blocks[-1].parameters():
-                p.requires_grad = True
-
-    def forward(self, images):
-        x = self.base_network(images)
-
-        return x
     
 class Backbone(nn.Module):
     def __init__(self):

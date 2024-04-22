@@ -5,7 +5,7 @@ import torch.nn.functional as F
 import numpy as np
 from pdb import set_trace as stop
 from .transformer_layers import TransformerEncoderLayer, TransformerDecoderLayer, SeBlock
-from .backbone import Backbone, MaxVit
+from .backbone import Backbone
 from .utils import custom_replace, weights_init, intraClass_Sim
 from .position_enc import PositionEmbeddingSine, positionalencoding2d
 
@@ -15,8 +15,7 @@ class CTranModel(nn.Module):
         super(CTranModel, self).__init__()
 
         # ResNet backbone
-        # self.backbone = Backbone()
-        self.backbone = MaxVit()
+        self.backbone = Backbone()
         hidden = 2048 # this should match the backbone output feature size 2048
 
         self.seblock = SeBlock(hidden, [14, 14], num_labels)
