@@ -14,7 +14,7 @@ class MaxVit(nn.Module):
     def __init__(self):
         super(MaxVit, self).__init__()
         # Load the pre-trained model
-        self.base_model = timm.create_model('maxvit_tiny_tf_224.in1k', pretrained=True, in_chan=64)
+        self.base_model = timm.create_model('maxvit_tiny_tf_224.in1k', pretrained=True)
 
         self.conv = nn.Conv2d(in_channels=1,
                                             out_channels=64,
