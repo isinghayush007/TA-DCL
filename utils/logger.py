@@ -20,6 +20,7 @@ class Logger:
     def __init__(self, args):
         self.model_name = args.model_name
         self.best_mAP = 0
+        self.best_acc = 0
         self.best_class_acc = 0
 
         if args.model_name:
@@ -80,6 +81,9 @@ class Logger:
         torch.save(save_dict_epoch,
                    args.model_name+'/'+'epochs'+'/'+'model_epoch'+str(epoch)+'_mAP'+str(format(valid_metrics['mAP'], '.2f'))+'.pt')
 
+        if valid_metrics['ACC'] >= self.best_acc:
+            self.best_acc = valid_metrics['acc']
+        
         if valid_metrics['mAP'] >= self.best_mAP:
             self.best_mAP = valid_metrics['mAP']
             self.best_test['epoch'] = epoch
@@ -103,6 +107,7 @@ class Logger:
             print('best mAP:  {:0.1f}'.format(self.best_test['mAP']*100))
             print('best CF1:  {:0.1f}'.format(self.best_test['CF1']*100))
             print('best OF1:  {:0.1f}'.format(self.best_test['OF1']*100))
+            print('best ACC:  {:0.1f}'.format(self.best_acc*100))
             print('**********************************')
 
-        return self.best_valid, self.best_test
+        return self.best_valid, self.best_test, self.best_acc

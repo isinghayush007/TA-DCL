@@ -99,6 +99,7 @@ step_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.sched
 metrics_logger = logger.Logger(args)
 loss_logger = logger.LossLogger(args.model_name)
 
+best_acc = 0.0
 for epoch in range(1, args.epochs+1):
     print('======================== {} ========================'.format(epoch))
     for param_group in optimizer.param_groups:
@@ -130,5 +131,9 @@ for epoch in range(1, args.epochs+1):
     step_scheduler.step(epoch)
 
     ############## Log and Save ##############
-    best_valid, best_test = metrics_logger.evaluate(valid_metrics, test_metrics, epoch, model, args)
+    best_valid, best_test, best_test_acc = metrics_logger.evaluate(valid_metrics, test_metrics, epoch, model, args)
     print(args.model_name)
+
+    if best_test_acc > best_acc:
+        best_acc = best_test_acc
+        torch.save(model.state_dict(), '/kaggle/working/best_model_weights.pth')
