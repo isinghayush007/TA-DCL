@@ -67,17 +67,17 @@ class CTranModel(nn.Module):
         init_label_embeddings = self.label_lt(const_label_input)
 
         features = self.backbone(images)
-        # print('backbone image feature shape:', features.size())
+        print('backbone image feature shape:', features.size())
 
         # features = features.view(2048, features.size(0), features.size(1))
 
         # Image spatial features 𝐅𝑠
         features1 = self.conv_downsample1(features)
-        # print("features1 shape", features1.size())
+        print("features1 shape", features1.size())
 
         # F'
         features2 = self.conv_downsample2(features)
-        # print("features2 shape", features2.size())
+        print("features2 shape", features2.size())
 
         # Category attention features 𝐅𝑎
         features3 = self.seblock(features2)
