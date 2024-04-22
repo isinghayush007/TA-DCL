@@ -15,27 +15,28 @@ class MaxVit(nn.Module):
         super(MaxVit, self).__init__()
         # Load the pre-trained model
         self.base_model = timm.create_model('maxvit_tiny_tf_224.in1k', pretrained=True)
-        # Modify the final layers to reshape output to (batch_size, 2048, 14, 14)
-        self.final_layers = nn.Sequential(
-            nn.Conv2d(self.base_model.num_features, 2048, kernel_size=1),
-            nn.ReLU(inplace=True),
-            nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False),
-            nn.Conv2d(2048, 2048, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True),
-            nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False),
-            nn.Conv2d(2048, 2048, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True)
-        )
 
-    def forward(self, x):
-        # Convert single-channel image to three-channel image (grayscale to RGB)
-        x = torch.cat([x] * 3, dim=1)
-        # Resize the input image to match the expected input size of the model (224x224)
-        x = F.interpolate(x, size=(224, 224), mode='bilinear', align_corners=False)
-        # Forward pass through the model
-        x = self.base_model.forward_features(x)
-        # Apply final layers
-        x = self.final_layers(x)
+        self.conv = nn.Conv2d(in_channels=1,
+                                            out_channels=64,
+                                            kernel_size=7,
+                                            stride=2,
+                                            padding=3,
+                                            bias=False)
+        
+        # self.final_layers = nn.Sequential(
+        #     nn.Conv2d(self.base_model.num_features, 2048, kernel_size=1),
+        #     nn.ReLU(inplace=True),
+        #     nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False),
+        #     nn.Conv2d(2048, 2048, kernel_size=3, padding=1),
+        #     nn.ReLU(inplace=True),
+        #     nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False),
+        #     nn.Conv2d(2048, 2048, kernel_size=3, padding=1),
+        #     nn.ReLU(inplace=True)
+        # )
+
+    def forward(self, images):
+        x = self.conv(images)
+        print("x: ", x)
         return x
     
 class Backbone(nn.Module):
