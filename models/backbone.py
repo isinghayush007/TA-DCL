@@ -16,23 +16,30 @@ class MaxVit(nn.Module):
         # Load the pre-trained model
         self.base_model = timm.create_model('maxvit_tiny_tf_224.in1k', pretrained=True)
         
-        # self.final_layers = nn.Sequential(
-        #     nn.Conv2d(self.base_model.num_features, 2048, kernel_size=1),
-        #     nn.ReLU(inplace=True),
-        #     nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False),
-        #     nn.Conv2d(2048, 2048, kernel_size=3, padding=1),
-        #     nn.ReLU(inplace=True),
-        #     nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False),
-        #     nn.Conv2d(2048, 2048, kernel_size=3, padding=1),
-        #     nn.ReLU(inplace=True)
-        # )
-
+        # Upsampling layers to increase spatial dimensions
+        self.upsample1 = nn.ConvTranspose2d(512, 1024, kernel_size=4, stride=2, padding=1)
+        self.upsample2 = nn.ConvTranspose2d(1024, 2048, kernel_size=4, stride=2, padding=1)
+        
+        # Convolutional layers to refine features
+        self.conv1 = nn.Conv2d(2048, 2048, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d(2048, 2048, kernel_size=3, padding=1)
+        
     def forward(self, images):
         x = torch.cat([images] * 3, dim=1)
         # Resize the input image to match the expected input size of the model (224x224)
         x = F.interpolate(x, size=(224, 224), mode='bilinear', align_corners=False)
         # Forward pass through the model
         x = self.base_model.forward_features(x)
+        print("x: ", x.shape);
+        # Upsample feature map
+        x = self.upsample1(x)
+        print("x: ", x.shape);
+        x = self.upsample2(x)
+        print("x: ", x.shape);
+        # Refine features with convolutional layers
+        x = F.relu(self.conv1(x))
+        print("x: ", x.shape);
+        x = F.relu(self.conv2(x))
         print("x: ", x.shape);
         return x
 
