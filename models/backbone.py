@@ -17,8 +17,9 @@ class MaxVit(nn.Module):
         self.base_model = timm.create_model('maxvit_tiny_tf_224.in1k', pretrained=True)
         
         # Upsampling layers to increase spatial dimensions
-        self.upsample1 = nn.ConvTranspose2d(512, 1024, kernel_size=4, stride=2, padding=1)
-        self.upsample2 = nn.ConvTranspose2d(1024, 2048, kernel_size=4, stride=2, padding=1)
+        # self.upsample1 = nn.ConvTranspose2d(512, 1024, kernel_size=4, stride=2, padding=1)
+        # self.upsample2 = nn.ConvTranspose2d(1024, 2048, kernel_size=4, stride=2, padding=1)
+        self.upsample = nn.ConvTranspose2d(512, 2048, kernel_size=4, stride=2, padding=1)
         
         # Convolutional layers to refine features
         self.conv1 = nn.Conv2d(2048, 2048, kernel_size=3, padding=1)
@@ -32,10 +33,12 @@ class MaxVit(nn.Module):
         x = self.base_model.forward_features(x)
         print("x: ", x.shape);
         # Upsample feature map
-        x = self.upsample1(x)
-        print("x: ", x.shape);
-        x = self.upsample2(x)
-        print("x: ", x.shape);
+        # x = self.upsample1(x)
+        # print("x: ", x.shape);
+        # x = self.upsample2(x)
+        # print("x: ", x.shape);
+        x = self.upsample(x)
+        print("x: ", x.shape)
         # Refine features with convolutional layers
         x = F.relu(self.conv1(x))
         print("x: ", x.shape);
