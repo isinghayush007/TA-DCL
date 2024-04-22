@@ -19,11 +19,9 @@ class MaxVit(nn.Module):
         self.final_layers = nn.Sequential(
             nn.Conv2d(self.base_model.num_features, 2048, kernel_size=1),
             nn.ReLU(inplace=True),
-            nn.Conv2d(2048, 2048, kernel_size=3, padding=1),
+            nn.ConvTranspose2d(2048, 2048, kernel_size=3, stride=2, padding=1, output_padding=1),
             nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(2048, 2048, kernel_size=2, stride=2),
-            nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(2048, 2048, kernel_size=2, stride=2)
+            nn.ConvTranspose2d(2048, 2048, kernel_size=3, stride=2, padding=1, output_padding=1)
         )
 
     def forward(self, x):
