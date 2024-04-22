@@ -122,10 +122,8 @@ class CTranModel(nn.Module):
         output1 = (output1*diag_mask).sum(-1)
 
         output2 = self.output_linear2(features2)
-        print('output2 shape:', output2.size())
-        # print('output2: ', output2)
         output2 = torch.squeeze(output2)
-        # print('output2 shape:', output2.size())
+        print('output2 shape:', output2.size())
         # print("output2: ", output2)
 
         return output1, output2, label_embeddings
