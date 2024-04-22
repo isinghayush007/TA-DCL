@@ -8,6 +8,27 @@ from pdb import set_trace as stop
 import os
 from torch.nn import Parameter
 import torch.utils.model_zoo as model_zoo
+import timm
+
+class MaxVit(nn.Module):
+    def __init__(self):
+        super(MaxVit, self).__init__()
+        # Load the pre-trained model
+        self.base_model = timm.create_model('maxvit_tiny_tf_224.in1k', pretrained=True)
+        # Modify the final layers to reshape output to (batch_size, 2048, 14, 14)
+        self.final_layers = nn.Sequential(
+            nn.Conv2d(self.base_model.num_features, 2048, kernel_size=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(2048, 2048, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True)
+        )
+
+    def forward(self, x):
+        # Forward pass through the model
+        x = self.base_model.forward_features(x)
+        # Apply final layers
+        x = self.final_layers(x)
+        return x
     
 class Backbone(nn.Module):
     def __init__(self):
