@@ -31,9 +31,9 @@ class MaxVit(nn.Module):
 
     def forward(self, images):
         x = self.conv(images)
-        print("x: ", x)
+        print("x: ", x.shape)
         x = self.base_model.forward_features(x)
-        print("x: ", x)
+        print("x: ", x.shape)
         return x
 
     
