@@ -90,7 +90,7 @@ class CTranModel(nn.Module):
             features1 = features1 + pos_encoding
 
         features1 = features1.view(features1.size(0), features1.size(1), -1).permute(0, 2, 1)
-        # print('resized feature shape:', features.size())
+        print('resized feature shape:', features1.size())
 
         init_label_embeddings = init_label_embeddings + features3
         print('init_label_embeddings:', init_label_embeddings.size())
