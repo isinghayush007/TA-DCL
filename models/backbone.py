@@ -14,11 +14,9 @@ class MaxVit(nn.Module):
     def __init__(self):
         super(MaxVit, self).__init__()
         # Load the pre-trained model
-        self.base_model = timm.create_model('maxvit_tiny_tf_224.in1k', pretrained=True)
+        self.base_model = timm.create_model('maxvit_tiny_tf_224.in1k', pretrained=False)
         
         # Upsampling layers to increase spatial dimensions
-        # self.upsample1 = nn.ConvTranspose2d(512, 1024, kernel_size=4, stride=2, padding=1)
-        # self.upsample2 = nn.ConvTranspose2d(1024, 2048, kernel_size=4, stride=2, padding=1)
         self.upsample = nn.ConvTranspose2d(512, 2048, kernel_size=4, stride=2, padding=1)
         
         # Convolutional layers to refine features
@@ -31,19 +29,15 @@ class MaxVit(nn.Module):
         x = F.interpolate(x, size=(224, 224), mode='bilinear', align_corners=False)
         # Forward pass through the model
         x = self.base_model.forward_features(x)
-        print("x: ", x.shape);
+        # print("x: ", x.shape);
         # Upsample feature map
-        # x = self.upsample1(x)
-        # print("x: ", x.shape);
-        # x = self.upsample2(x)
-        # print("x: ", x.shape);
         x = self.upsample(x)
-        print("x: ", x.shape)
+        # print("x: ", x.shape)
         # Refine features with convolutional layers
         x = F.relu(self.conv1(x))
-        print("x: ", x.shape);
+        # print("x: ", x.shape);
         x = F.relu(self.conv2(x))
-        print("x: ", x.shape);
+        # print("x: ", x.shape);
         return x
 
     
