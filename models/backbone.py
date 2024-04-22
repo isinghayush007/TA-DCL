@@ -15,8 +15,6 @@ class MaxVit(nn.Module):
         super(MaxVit, self).__init__()
         # Load the pre-trained model
         self.base_model = timm.create_model('maxvit_tiny_tf_224.in1k', pretrained=True)
-
-        self.conv = nn.Conv2d(in_channels=1, out_channels=3, kernel_size=1)
         
         # self.final_layers = nn.Sequential(
         #     nn.Conv2d(self.base_model.num_features, 2048, kernel_size=1),
@@ -30,10 +28,12 @@ class MaxVit(nn.Module):
         # )
 
     def forward(self, images):
-        x = self.conv(images)
-        print("x: ", x.shape)
+        x = torch.cat([images] * 3, dim=1)
+        # Resize the input image to match the expected input size of the model (224x224)
+        x = F.interpolate(x, size=(224, 224), mode='bilinear', align_corners=False)
+        # Forward pass through the model
         x = self.base_model.forward_features(x)
-        print("x: ", x.shape)
+        print("x: ", x);
         return x
 
     
