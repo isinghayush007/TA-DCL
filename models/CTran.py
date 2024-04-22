@@ -65,7 +65,7 @@ class CTranModel(nn.Module):
         const_label_input = self.label_input.repeat(images.size(0), 1).cuda()
         # print("const_label_input: ", const_label_input);
         init_label_embeddings = self.label_lt(const_label_input)
-        print('init_label_embeddings:', init_label_embeddings.size())
+        # print('init_label_embeddings:', init_label_embeddings.size())
         # print('init_label_embeddings:', init_label_embeddings)
 
         features = self.backbone(images)
@@ -75,15 +75,15 @@ class CTranModel(nn.Module):
 
         # Image spatial features 𝐅𝑠
         features1 = self.conv_downsample1(features)
-        print("features1 shape", features1.size())
+        # print("features1 shape", features1.size())
 
         # F'
         features2 = self.conv_downsample2(features)
-        print("features2 shape", features2.size())
+        # print("features2 shape", features2.size())
 
         # Category attention features 𝐅𝑎
         features3 = self.seblock(features2)
-        # print('seblock output shape:', features3.size())
+        print('seblock output shape:', features3.size())
 
         if self.use_pos_enc:
             pos_encoding = self.position_encoding(features1, torch.zeros(features.size(0), 18, 18, dtype=torch.bool).cuda())
