@@ -40,6 +40,8 @@ class MaxVit(nn.Module):
     def forward(self, images):
         x = self.conv(images)
         print("x: ", x.shape)
+        x = self.base_model.forward_features(x)
+        print("x: ", x)
         return x
     
 class Backbone(nn.Module):
