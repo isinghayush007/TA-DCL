@@ -20,7 +20,10 @@ class MaxVit(nn.Module):
             nn.Conv2d(self.base_model.num_features, 2048, kernel_size=1),
             nn.ReLU(inplace=True),
             nn.Conv2d(2048, 2048, kernel_size=3, padding=1),
-            nn.ReLU(inplace=True)
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(2048, 2048, kernel_size=2, stride=2),
+            nn.ReLU(inplace=True),
+            nn.ConvTranspose2d(2048, 2048, kernel_size=2, stride=2)
         )
 
     def forward(self, x):
@@ -33,7 +36,6 @@ class MaxVit(nn.Module):
         # Apply final layers
         x = self.final_layers(x)
         return x
-
     
 class Backbone(nn.Module):
     def __init__(self):
