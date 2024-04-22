@@ -99,14 +99,13 @@ class CTranModel(nn.Module):
         # print('transformer input shape:', embeddings.size())
 
         # Feed image and label embeddings through Transformer
-        embeddings = self.LayerNorm(embeddings)
-        print('transformer input shape:', embeddings.size())        
+        embeddings = self.LayerNorm(embeddings)        
         # attns = []
         for layer in self.encoder_layers:
             embeddings = layer(embeddings)
             # attns += attn.detach().unsqueeze(0).data
 
-        # print('transformer output shape:', embeddings.size())
+        print('transformer output shape:', embeddings.size())
 
         # 𝐅s′
         image_embeddings = embeddings[:, 0:features1.size(1), :]
